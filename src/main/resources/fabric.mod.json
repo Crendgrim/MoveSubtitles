@@ -1,0 +1,29 @@
+{
+	"schemaVersion": 1,
+	"id": "movesubtitles",
+	"version": "${version}",
+	"name": "Move Subtitles",
+	"description": "Allows moving the subtitles to other places on the screen",
+	"authors": [
+		"Crendgrim"
+	],
+	"contact": {
+		"sources": "https://github.com/Crendgrim/move-subtitles"
+	},
+	"license": "LGPL-3.0",
+	"icon": "movesubtitles.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"mod.crend.movesubtitles.MoveSubtitles"
+		]
+	},
+	"mixins": [
+		"movesubtitles.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.0",
+		"minecraft": ">=1.20.4",
+		"java": ">=17"
+	}
+}
