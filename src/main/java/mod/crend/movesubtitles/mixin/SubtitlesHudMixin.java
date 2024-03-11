@@ -24,20 +24,27 @@ public abstract class SubtitlesHudMixin {
 	@WrapOperation(method = "render", at=@At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V"))
 	private void moveSubtitles(MatrixStack instance, float x, float y, float z, Operation<Void> original, DrawContext context, @Local(ordinal = 0) int i, @Local(ordinal = 1) int j) {
 		int centerX = j / 2;
-		int heightPerColumn = 9;
+		int heightPerRow = 10;
 		float x2 = switch (MoveSubtitlesConfig.INSTANCE.edge) {
 			case TOP_LEFT, LEFT, BOTTOM_LEFT -> centerX + 2.0F;
 			case TOP, BOTTOM -> context.getScaledWindowWidth() / 2.0F;
 			case TOP_RIGHT, RIGHT, BOTTOM_RIGHT -> x;
 		};
 		float y2 = switch (MoveSubtitlesConfig.INSTANCE.edge) {
-			case TOP_LEFT, TOP, TOP_RIGHT -> 15 + i * (heightPerColumn + 1);
-			case LEFT, RIGHT -> context.getScaledWindowHeight() / 2.0F - (this.audibleEntries.size() / 2.0F - i) * (heightPerColumn + 1);
+			case TOP_LEFT, TOP, TOP_RIGHT -> 15 + i * heightPerRow;
+			case LEFT, RIGHT -> (context.getScaledWindowHeight() / 2.0F - heightPerRow / 2.0F - (heightPerRow * i)) + this.audibleEntries.size() * heightPerRow / 2;
 			case BOTTOM_LEFT, BOTTOM_RIGHT -> y;
 			case BOTTOM -> y - 10;
 		};
+
 		x2 += MoveSubtitlesConfig.INSTANCE.deltaX;
 		y2 += MoveSubtitlesConfig.INSTANCE.deltaY;
+
+		// Subtitle text can look weird with some resolutions/GUI scales
+		// if between a pixel. So make sure it's at an integer position.
+		x2 = (int)x2;
+		y2 = (int)y2;
+		
 		original.call(instance, x2, y2, z);
 	}
 }
