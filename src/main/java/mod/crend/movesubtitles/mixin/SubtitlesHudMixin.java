@@ -32,7 +32,7 @@ public abstract class SubtitlesHudMixin {
 		};
 		float y2 = switch (MoveSubtitlesConfig.INSTANCE.edge) {
 			case TOP_LEFT, TOP, TOP_RIGHT -> 15 + i * heightPerRow;
-			case LEFT, RIGHT -> (context.getScaledWindowHeight() / 2.0F - heightPerRow / 2.0F - (heightPerRow * i)) + this.audibleEntries.size() * heightPerRow / 2;
+			case LEFT, RIGHT -> context.getScaledWindowHeight() / 2.0F + ((this.audibleEntries.size() - 1) / 2.0F - i) * heightPerRow;
 			case BOTTOM_LEFT, BOTTOM_RIGHT -> y;
 			case BOTTOM -> y - 10;
 		};
