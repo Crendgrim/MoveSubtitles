@@ -22,8 +22,8 @@
 		"movesubtitles.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.15.0",
-		"minecraft": ">=1.20.4",
+		"fabricloader": "${fabric_loader_version_range}",
+		"minecraft": "${minecraft_version_range}",
 		"java": ">=17"
 	}
 }

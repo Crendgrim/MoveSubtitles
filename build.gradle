@@ -1,6 +1,6 @@
 plugins {
 	id 'fabric-loom' version '1.5-SNAPSHOT'
-	id 'maven-publish'
+	id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
 version = project.mod_version
@@ -14,14 +14,14 @@ dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 }
 
 processResources {
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand(project.properties)
 	}
 }
 
@@ -42,5 +42,32 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}"}
+	}
+}
+
+unifiedPublishing {
+	project {
+		displayName = "[${project.supported_versions_string}] ${project.mod_name} ${project.mod_version}"
+		version = "${project.mod_version}+${project.minecraft_version}"
+		changelog = "${project.changelog}"
+		releaseType = "${project.release_type}"
+		gameVersions = List.of(project.supported_versions.split(';'))
+		gameLoaders = ["fabric"]
+
+		mainPublication tasks.remapJar
+
+		if (System.getenv("CURSEFORGE_TOKEN")) {
+			curseforge {
+				token = System.getenv("CURSEFORGE_TOKEN")
+				id = rootProject.curseforge_id
+			}
+		}
+
+		if (System.getenv("MODRINTH_TOKEN")) {
+			modrinth {
+				token = System.getenv("MODRINTH_TOKEN")
+				id = rootProject.modrinth_id
+			}
+		}
 	}
 }
